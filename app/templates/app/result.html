@@ -1,0 +1,155 @@
+{% extends 'app/base.html' %}
+
+{% block nav %}
+  {% include 'app/navbar_list.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg">
+    <button class="btn btn-secondary float-right mb-1 py-0" type="button" data-toggle="collapse"
+    data-target="#collapseContent01" aria-expanded="false" aria-controls="collapseContent01" style="font-size: 10px;">▼</button>
+    <div class="collapse show" id="collapseContent01">
+      <table class="table table-striped text-center table-hover">
+        <tr class="table-primary">
+          <th>項目</th>
+          <th>選択プラン</th>
+          <th>金額</th>
+        </tr>
+        <tr>
+          <th>ペット金額</th>
+          <td></td>
+          <td>{{ pet_price}}</td>
+        </tr>
+        <tr>
+          <th>その他代金</th>
+          <td></td>
+          <td>{{ other_price}}</td>
+        </tr>
+        <tr>
+          <th>ドクターズチェックP</th>
+          <td>{{ plan.get_dc_plan_display }}</td>
+          <td>{{ dc_price }}</td>
+        </tr>
+        <tr>
+          <th>ほっとサポート</th>
+          <td>{{ plan.get_hs_plan_display }}</td>
+          <td>{{ hs_price }}</td>
+        </tr>
+        <tr>
+          <th>ペット保険</th>
+          <td>{{ plan.get_insurance_plan_display }}
+            {% if insurance_discount == True %}
+              <br><span class="text-danger">*多頭割適用中</span>
+            {% endif %}
+          </td>
+          <td>{{ insurance_price }}</td>
+        </tr>
+        <tr>
+          <th>ごはんセット</th>
+          <td>{{ plan.get_food_plan_display }}</td>
+          <td>{{ food_price }}</td>
+        </tr>
+        <tr>
+          <th>おうちセット</th>
+          <td>{{ plan.get_home_plan_display }}</td>
+          <td>{{ home_price }}</td>
+        </tr>
+        <tr>
+          <th>しつけお手入れセット</th>
+          <td>{{ plan.get_care_plan_display }}</td>
+          <td>{{ care_price }}</td>
+        </tr>
+        {% if set_discount < 0 %}
+        <tr class="text-danger">
+          <th>用品セット割引</th>
+          <td></td>
+          <td>{{ set_discount }}</td>
+        </tr>
+        {% endif %}
+        <tr class="table-warning">
+          <th>合計金額</th>
+          <td class="small">(*税込み)</td>
+          <td>{{ total_price }}</td>
+        </tr>
+        {% if hs_m_price > 0 %}
+        <tr>
+          <td>ほっとサポート月額分</td>
+          <td>（残り9ヶ月分）</td>
+          <td>{{ hs_m_price }}</td>
+        </tr>
+        {% endif %}
+        {% if insurance_m_price > 0 %}
+        <tr>
+          <td>ペット保険月額分</td>
+          <td>（残り9ヶ月分）</td>
+          <td>{{ insurance_m_price }}</td>
+        </tr>
+        {% endif %}
+      </table>
+
+      <table class="table table-sm table-hover my-5">
+        <tr>
+          <td>① プラン合計</td>
+          <td>{{ total_price }}円</td>
+        </tr>
+        <tr>
+          <td>② 頭金</td>
+          <td>{{ down_payment }}円</td>
+        </tr>
+        <tr>
+          <td>③ 分割申込金</td>
+          <td>{{ capital }}円</td>
+        </tr>
+        {% if plan.bonus_setting %}
+        <tr>
+          <td>● ボーナス設定額/1回</td>
+          <td>{{ plan.bonus_payment }}円</td>
+        </tr>
+        <tr>
+          <td>● ボーナス設定月(夏/冬)</td>
+          <td>( {{ plan.bonus_s_month }}月 / {{ plan.bonus_w_month }}月 )</td>
+        </tr>
+        {% endif %}
+        <tr>
+          <td>● 支払開始日</td>
+          <td>{{ start_date }}</td>
+        </tr>
+        <tr>
+          <td>● ローン会社</td>
+          <td>{{ plan.loan_company }}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-lg">
+    <table class="table table-striped text-center table-hover">
+      <tr class="table-primary">
+        <th>回数</th>
+        <th>月々<br><small>[②〜,①]</small></th>
+        <th>総額<br><small>（頭金別）</small></th>
+        <th>手数料</th>
+        <th>完了月</th>
+        {% if plan.bonus_setting %}
+        <th>B率</th>
+        {% endif %}
+      </tr>
+      <tr>
+        {% for i in simulation_list %}
+          {% if i == '改行' %}
+            </tr>
+            <tr>
+          {% else %}
+          <td>{{ i }}</td>
+          {% endif %}
+        {% endfor %}
+      </tr>
+    </table>
+    {% if plan.bonus_setting %}
+      <p class="alert alert-danger small text-center">ボーナス率は50％以下まで申し込み可</p>
+    {% endif %}
+  </div>
+
+<a class="btn btn-outline-primary btn-block btn-lg" href="{% url 'app:edit' plan_id=plan.id %}">プランを変更する</a>
+{% endblock %}

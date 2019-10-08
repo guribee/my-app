@@ -1,0 +1,41 @@
+{% extends 'app/base.html' %}
+
+{% block nav %}
+  {% include 'app/navbar_list.html' %}
+{% endblock %}
+
+{% block content %}
+
+<div class="col-xl-10 offset-xl-1">
+  <table class="table table-striped table-hover text-center">
+    <tr>
+      <th class="small">No,</th>
+      <th class="small">作成日</th>
+      <th class="small">金額</th>
+      <th class="small">ローン会社</th>
+      <th class="small">操作</th>
+    </tr>
+    {% for plan in plans %}
+      <tr>
+          <td>{{ plan.id }}</td>
+          <td class="small">{{ plan.created_at }}</td>
+        <td class="small">{{ plan.pet_price }}</td>
+        <td class="small">{{ plan.loan_company }}</td>
+        <td>
+          <a class="btn btn-sm btn-outline-primary" href="{% url 'app:edit' plan_id=plan.id %}" role="button">編集</a>
+          <a class="btn btn-sm btn-outline-info" href="{% url 'app:result' plan_id=plan.id %}" role="button">結果</a>
+          <form action="{% url 'app:delete' plan_id=plan.id %}" method="post">{% csrf_token %}
+            <button class="btn btn-sm btn-outline-secondary" type="submit" onclick="return confirm('本当に削除しますか？');">削除</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
+<div class="col-6 offset-3 justify-content-center">
+  {% if is_paginated %}
+    {% include 'app/pagination.html' %}
+  {% endif %}
+</div>
+
+{% endblock %}

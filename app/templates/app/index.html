@@ -1,0 +1,17 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+
+<div>
+  <a class="btn btn-outline-info btn-lg btn-block mb-4" href="{% url 'app:new_plan' %}" role="button">新規シミュレーション</a>
+  <a class="btn btn-outline-info btn-lg btn-block mb-4" href="{% url 'app:history' user_name=request.user.username %}" role="button">履歴の確認・編集</a>
+  <a class="btn btn-outline-info btn-lg btn-block" href="{% url 'app:document' %}" role="button">Document</a>
+  <div class="row justify-content-center text-center">
+    <div class="col-md-8">
+      <img class="w-75" src="/media/images/1568109.png">
+    </div>
+  </div>
+  <a class="btn btn-outline-dark btn-sm btn-block" href="{% url 'app:logout' %}" role="button">ログアウト</a>
+</div>
+
+{% endblock %}

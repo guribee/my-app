@@ -1,0 +1,25 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+
+<form action="{% url 'app:signup' %}" method="post">{% csrf_token %}
+    <h2 class="border-bottom border-muted mb-4 text-muted">新規登録</h2>
+    <table class="table table-borderless">
+      <tr>
+        <th><label>ユーザー名</label></th>
+        <td>{{ form.username }}{{ form.username.errors }}</td>
+      </tr>
+      <tr>
+        <th><label>パスワード</label></th>
+        <td>{{ form.password1 }}{{ form.password1.errors }}</td>
+      </tr>
+      <tr>
+        <th><label>パスワード（確認用）</label></th>
+        <td>{{ form.password2 }}{{ form.password2.errors }}</td>
+      </tr>
+    </table>
+
+    <input class="btn btn-outline-primary btn-block" type="submit" value="新規登録">
+</form>
+
+{% endblock %}
